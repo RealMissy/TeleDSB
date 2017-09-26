@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 # requirements: https://github.com/jarrekk/imgkit
 
 # how to run the script: python getTimetables.py <<YOUR-DSB-USERNAME>> <<YOUR-DSB-PASSWORD>>
