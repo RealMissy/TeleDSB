@@ -50,9 +50,9 @@ python getTimetables.py <<YOUR-DSB-LOGIN>> <<YOUR-DSB-PASSWORD>>
 
 ## Authors
 
-RealMissy
+<a href="https://github.com/RealMissy">RealMissy</a>
 
-JayCeM
+<a href="https://github.com/JayCeM">JayCeM</a>
 
 ## License
 
