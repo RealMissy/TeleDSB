@@ -22,7 +22,7 @@ https://telegram.me/botfather
 Download our last stable release and run it with the following command.
 
 ```
-python TeleDSB.py
+python TeleDSB.py <<YOUR-BOT-TOKEN>>
 ```
 
 ## Authors
