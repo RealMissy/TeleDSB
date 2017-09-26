@@ -29,9 +29,11 @@ python TeleDSB.py
 
 RealMissy
 
+JayCeM
+
 ## License
 
-This project is licensed GNU GENERAL PUBLIC LICENSE
+This project is licensed GNU General Public License 3
 
 ## Acknowledgments
 
