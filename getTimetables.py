@@ -59,15 +59,20 @@ while 1:
         sys.exit()
         
     timetableUrls[1] = dsbData['timetables'][1]['src'] # select the 2nd timetable-Url
+    print("Successfully logged in")
 
     timetableUrls[0] = dsbData['timetables'][0]['src'] # select the 1st timetable-Url
     timetableUrls[1] = dsbData['timetables'][1]['src'] # select the 2nd timetable-Url
+
+    print("-----------please ignore the follering messages-----------")
 
     # conversion from html to .jpg
     with suppress_stdout():
         imgkit.from_url(str(timetableUrls[0]),'%s[0].jpg' % USERNAME)
         imgkit.from_url(str(timetableUrls[1]),'%s[1].jpg' % USERNAME)
-
+        
+    print("----------------------------------------------------------")
+    
     # sleep for 30 Minutes (30*60Seconds = 1800 Seconds)
     print("waiting 30 minutes for next update")
     time.sleep(1800) # every 30 minutes the script gets the timetables
