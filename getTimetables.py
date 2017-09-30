@@ -55,7 +55,7 @@ while 1:
     try:
         timetables[0] = dsbData['timetables'][0] # select the 1st timetable
     except KeyError:
-        print("The username or password is incorrect. Please check the credentials and try again")
+        print("The username or password you used is incorrect. Please check the credentials and try again")
         sys.exit()
         
     timetableUrls[1] = dsbData['timetables'][1]['src'] # select the 2nd timetable-Url
@@ -69,5 +69,5 @@ while 1:
         imgkit.from_url(str(timetableUrls[1]),'%s[1].jpg' % USERNAME)
 
     # sleep for 30 Minutes (30*60Seconds = 1800 Seconds)
-    print("waiting 30 Minutes")
+    print("waiting 30 minutes for next update")
     time.sleep(1800) # every 30 minutes the script gets the timetables
