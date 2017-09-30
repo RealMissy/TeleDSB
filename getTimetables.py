@@ -3,19 +3,45 @@
 
 # requirements: https://github.com/jarrekk/imgkit
 
-# how to run the script: python getTimetables.py <<YOUR-DSB-USERNAME>> <<YOUR-DSB-PASSWORD>>
+# how to run the script: python getTimetables.py -u USERNAME -p PASSWORD [-h]
+ 
+from contextlib import contextmanager
 
+import argparse
 import urllib # for getting the DSB-API information
 import json # for processing the DSB-API information
 import imgkit # for converting the timetables from html to png
 import time
 import sys
+import os
 
-USERNAME = sys.argv[1] # the first parameter after the file name
-PASSWORD = sys.argv[2] # the second parameter after the filename
+# parser setup
+parser = argparse.ArgumentParser(description='TeleDSB', add_help=False)
+parser.description = "Stop asking for help, here you have it !"
+
+required = parser.add_argument_group('Required arguments')
+required.add_argument('-u', '--username', required=True)
+required.add_argument('-p', '--password', required=True)
+
+optional = parser.add_argument_group('Optional arguments')
+optional.add_argument("-h", "--help", action="help", help="show this help message and exit")
+args = parser.parse_args()
+
+@contextmanager
+def suppress_stdout():
+    with open(os.devnull, "w") as devnull:
+        old_stdout = sys.stdout
+        sys.stdout = devnull
+        sys.stderr = os.devnull
+        try:  
+            yield
+        finally:
+            sys.stdout = old_stdout
+
+USERNAME = args.username 
+PASSWORD = args.password 
 
 while 1:
-
     url = "https://dsbclient.noim.io/%s/%s" % (USERNAME, PASSWORD) # generate the url for the DSB-API
     response = urllib.urlopen(url) # raw input data
     dsbData = json.loads(response.read()) # unprocessed JSON data
@@ -26,15 +52,21 @@ while 1:
     timetablesJpg = [0, 0] # it contains the JPG versions of the timetables
 
     # fill the arrays
-    timetables[0] = dsbData['timetables'][0] # select the 1st timetable
-    timetables[1] = dsbData['timetables'][1] # select the 2nd timetable
+    try:
+        timetables[0] = dsbData['timetables'][0] # select the 1st timetable
+    except KeyError:
+        print("The username or password is incorrect. Please check the credentials and try again")
+        sys.exit()
+        
+    timetableUrls[1] = dsbData['timetables'][1]['src'] # select the 2nd timetable-Url
 
     timetableUrls[0] = dsbData['timetables'][0]['src'] # select the 1st timetable-Url
     timetableUrls[1] = dsbData['timetables'][1]['src'] # select the 2nd timetable-Url
 
     # conversion from html to .jpg
-    imgkit.from_url(str(timetableUrls[0]),'%s[0].jpg' % USERNAME)
-    imgkit.from_url(str(timetableUrls[1]),'%s[1].jpg' % USERNAME)
+    with suppress_stdout():
+        imgkit.from_url(str(timetableUrls[0]),'%s[0].jpg' % USERNAME)
+        imgkit.from_url(str(timetableUrls[1]),'%s[1].jpg' % USERNAME)
 
     # sleep for 30 Minutes (30*60Seconds = 1800 Seconds)
     print("waiting 30 Minutes")
