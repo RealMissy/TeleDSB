@@ -38,10 +38,25 @@ def suppress_stdout():
         finally:
             sys.stdout = old_stdout
 
+def check_account(USERNAME,PASSWORD):
+    url = "https://dsbclient.noim.io/%s/%s" % (USERNAME, PASSWORD)
+    response = urllib.urlopen(url)
+    dsbData = json.loads(response.read())
+    if dsbData == {}:
+        return False
+    else:
+        return True
+    
 USERNAME = args.username 
-PASSWORD = args.password 
+PASSWORD = args.password
 
 while 1:
+    if check_account(args.username, args.password) == True :
+        print("Successfully logged in")
+    else:
+        print("The username or password you used is incorrect. Please check the credentials and try again")
+        sys.exit()
+        
     url = "https://dsbclient.noim.io/%s/%s" % (USERNAME, PASSWORD) # generate the url for the DSB-API
     response = urllib.urlopen(url) # raw input data
     dsbData = json.loads(response.read()) # unprocessed JSON data
@@ -52,14 +67,8 @@ while 1:
     timetablesJpg = [0, 0] # it contains the JPG versions of the timetables
 
     # fill the arrays
-    try:
-        timetables[0] = dsbData['timetables'][0] # select the 1st timetable
-    except KeyError:
-        print("The username or password you used is incorrect. Please check the credentials and try again")
-        sys.exit()
-        
-    timetableUrls[1] = dsbData['timetables'][1]['src'] # select the 2nd timetable-Url
-    print("Successfully logged in")
+    timetables[0] = dsbData['timetables'][0] # select the 1st timetable
+    timetables[1] = dsbData['timetables'][1] # select the 2nd timetable
 
     timetableUrls[0] = dsbData['timetables'][0]['src'] # select the 1st timetable-Url
     timetableUrls[1] = dsbData['timetables'][1]['src'] # select the 2nd timetable-Url
